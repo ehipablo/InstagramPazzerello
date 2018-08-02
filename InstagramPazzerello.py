@@ -1,10 +1,10 @@
-__author__ = 'ehipablo'
-#tested with python 2.7.5 on Parrot Os (Debian)
-from InstagramAPI import InstagramAPI
-import time
+#tested on python 2.7.15
 
-#INSTALL MODULE InstagramAPI: python -m pip install -e git+https://github.com/LevPasha/Instagram-API-python.git#egg=InstagramAPI
-#TO SEE THE MEDIA ID "https://api.instagram.com/oembed/?url= + URLPHOTO"
+__author__ = 'ehipablo'
+from InstagramAPI import InstagramAPI
+import time, requests, subprocess
+
+#INSTALL MODULE InstagramAPI: "python -m pip install -e git+https://github.com/LevPasha/Instagram-API-python.git#egg=InstagramAPI"
 
 print " __               __ "
 print "|__|.-----.-----.|  |_.---.-.-----.----.---.-.--------."
@@ -18,22 +18,44 @@ print '|__| '
 print ""
 print "Per veri rompi coglioni ;)"
 print ""
+
 username = raw_input("[+]Your Username: ")
 password = raw_input("[+]Your Password: ")
 
 InstagramAPI = InstagramAPI(username, password)
 InstagramAPI.login()
 
-text = raw_input("[+]Comment: ")
-mediaID = raw_input("[+]media id: ")
-print ""
-continue1 = raw_input("[+]Do you wanna continue?[Y/N]: ")
+key = input("[+]1)Comment spam 2)FollowUnfollow: ")
 
-if continue1 == "Y":
+#COMMENT SPAM
+if key == 1:
+    text = raw_input("[+]Comment: ")
+    urlfoto = raw_input("[+]Url foto: ")
+    url = ("https://api.instagram.com/oembed/?url="+urlfoto)
+    subprocess.Popen(['xdg-open', url])
+    mediaID = raw_input("[+]media id: ")
+    print ""
+    continue1 = raw_input("[+]Do you wanna continue?[Y/N]: ")
+
+    if continue1 == "Y":
+        while True:
+            for x in range(3):
+                InstagramAPI.comment(mediaID, text)
+            time.sleep(50)
+        print "ok"
+    else:
+        exit()
+
+#FOLLOWUNFOLLOW
+elif key == 2:
+    username = raw_input("[+]Username to follow: ")
+    url = "https://www.instagram.com/"+username+"?__a=1"
+    subprocess.Popen(['xdg-open', url])
+    userID = raw_input("[+]userID: ")
     while True:
-        for x in range(6):
-            InstagramAPI.comment(mediaID, text)
-        time.sleep(20)
-    print "ok"
+        InstagramAPI.follow(userID)
+        time.sleep(3)
+        InstagramAPI.unfollow(userID)
+        time.sleep(1)
 else:
     exit()
