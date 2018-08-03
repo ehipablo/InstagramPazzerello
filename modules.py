@@ -2,7 +2,6 @@ import subprocess, time
 
 def MEDIAID():
     global urlfoto
-    global urlfoto
     global mediaID
     urlfoto = raw_input("[+]Url foto: ")
     url = ("https://api.instagram.com/oembed/?url="+urlfoto)
